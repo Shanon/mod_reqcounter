@@ -1,0 +1,157 @@
+ServerTokens OS
+ServerRoot "[% server_root %]"
+PidFile run/httpd.pid
+Timeout 120
+KeepAlive On
+MaxKeepAliveRequests 100
+KeepAliveTimeout 15
+<IfModule prefork.c>
+    StartServers       8
+    MinSpareServers    5
+    MaxSpareServers   20
+    ServerLimit      256
+    MaxClients       256
+    MaxRequestsPerChild  4000
+</IfModule>
+<IfModule worker.c>
+    StartServers         2
+    MaxClients         150
+    MinSpareThreads     25
+    MaxSpareThreads     75 
+    ThreadsPerChild     25
+    MaxRequestsPerChild  0
+</IfModule>
+Listen [% openport %]
+LoadModule authz_host_module modules/mod_authz_host.so
+LoadModule include_module modules/mod_include.so
+LoadModule log_config_module modules/mod_log_config.so
+LoadModule logio_module modules/mod_logio.so
+LoadModule env_module modules/mod_env.so
+LoadModule ext_filter_module modules/mod_ext_filter.so
+LoadModule mime_magic_module modules/mod_mime_magic.so
+LoadModule expires_module modules/mod_expires.so
+LoadModule deflate_module modules/mod_deflate.so
+LoadModule headers_module modules/mod_headers.so
+LoadModule usertrack_module modules/mod_usertrack.so
+LoadModule setenvif_module modules/mod_setenvif.so
+LoadModule mime_module modules/mod_mime.so
+LoadModule status_module modules/mod_status.so
+LoadModule autoindex_module modules/mod_autoindex.so
+LoadModule info_module modules/mod_info.so
+LoadModule vhost_alias_module modules/mod_vhost_alias.so
+LoadModule negotiation_module modules/mod_negotiation.so
+LoadModule dir_module modules/mod_dir.so
+LoadModule actions_module modules/mod_actions.so
+LoadModule speling_module modules/mod_speling.so
+LoadModule alias_module modules/mod_alias.so
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule cgi_module modules/mod_cgi.so
+LoadModule version_module modules/mod_version.so
+ServerAdmin root@localhost
+UseCanonicalName Off
+DocumentRoot "[% document_root %]"
+<Directory />
+    Options FollowSymLinks
+    AllowOverride None
+</Directory>
+<Directory "[% document_root %]">
+    Options Indexes FollowSymLinks ExecCGI
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+<IfModule mod_userdir.c>
+    UserDir disable
+</IfModule>
+DirectoryIndex index.html index.html.var
+AccessFileName .htaccess
+<Files ~ "^\.ht">
+    Order allow,deny
+    Deny from all
+</Files>
+TypesConfig /etc/mime.types
+DefaultType text/plain
+<IfModule mod_mime_magic.c>
+    MIMEMagicFile conf/magic
+</IfModule>
+HostnameLookups Off
+ErrorLog logs/error_log
+LogLevel warn
+LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
+LogFormat "%h %l %u %t \"%r\" %>s %b" common
+LogFormat "%{Referer}i -> %U" referer
+LogFormat "%{User-agent}i" agent
+CustomLog logs/access_log combined
+ServerSignature On
+IndexOptions FancyIndexing VersionSort NameWidth=* HTMLTable
+ReadmeName README.html
+HeaderName HEADER.html
+IndexIgnore .??* *~ *# HEADER* README* RCS CVS *,v *,t
+AddLanguage ca .ca
+AddLanguage cs .cz .cs
+AddLanguage da .dk
+AddLanguage de .de
+AddLanguage el .el
+AddLanguage en .en
+AddLanguage eo .eo
+AddLanguage es .es
+AddLanguage et .et
+AddLanguage fr .fr
+AddLanguage he .he
+AddLanguage hr .hr
+AddLanguage it .it
+AddLanguage ja .ja
+AddLanguage ko .ko
+AddLanguage ltz .ltz
+AddLanguage nl .nl
+AddLanguage nn .nn
+AddLanguage no .no
+AddLanguage pl .po
+AddLanguage pt .pt
+AddLanguage pt-BR .pt-br
+AddLanguage ru .ru
+AddLanguage sv .sv
+AddLanguage zh-CN .zh-cn
+AddLanguage zh-TW .zh-tw
+LanguagePriority en ca cs da de el eo es et fr he hr it ja ko ltz nl nn no pl pt pt-BR ru sv zh-CN zh-TW
+ForceLanguagePriority Prefer Fallback
+AddDefaultCharset UTF-8
+AddType application/x-compress .Z
+AddType application/x-gzip .gz .tgz
+AddHandler cgi-script .cgi
+AddHandler type-map var
+AddType text/html .shtml
+AddOutputFilter INCLUDES .shtml
+BrowserMatch "Mozilla/2" nokeepalive
+BrowserMatch "MSIE 4\.0b2;" nokeepalive downgrade-1.0 force-response-1.0
+BrowserMatch "RealPlayer 4\.0" force-response-1.0
+BrowserMatch "Java/1\.0" force-response-1.0
+BrowserMatch "JDK/1\.0" force-response-1.0
+BrowserMatch "Microsoft Data Access Internet Publishing Provider" redirect-carefully
+BrowserMatch "MS FrontPage" redirect-carefully
+BrowserMatch "^WebDrive" redirect-carefully
+BrowserMatch "^WebDAVFS/1.[0123]" redirect-carefully
+BrowserMatch "^gnome-vfs/1.0" redirect-carefully
+BrowserMatch "^XML Spy" redirect-carefully
+BrowserMatch "^Dreamweaver-WebDAV-SCM1" redirect-carefully
+
+
+LoadModule reqcounter_module modules/mod_reqcounter.so
+RequestCount On
+RequestCountSetRandomPersent On
+RequestCountLongRangeMinutes 5
+RequestCountShortRangeSeconds 10
+RequestCountShmDir rc_shm/
+
+<VirtualHost *>
+    ServerName test1.localhost.localdomain
+    DocumentRoot "[% document_root %]"
+</VirtualHost>
+<VirtualHost *>
+    ServerName test2.localhost.localdomain
+    DocumentRoot "[% document_root %]"
+</VirtualHost>
+<VirtualHost *>
+    ServerName test3.localhost.localdomain
+    DocumentRoot "[% document_root %]"
+</VirtualHost>
